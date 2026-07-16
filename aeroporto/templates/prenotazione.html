@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Ricerca Posti</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:rgba(0,0,0,0.55);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.15);
+        }
+
+        .navbar h2{ font-size:18px; }
+
+        .nav-actions{ display:flex; align-items:center; gap:12px; }
+
+        .nav-btn a{ text-decoration:none; }
+
+        .nav-btn button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            background:#0077b6;
+            color:white;
+            transition:0.2s;
+        }
+
+        .nav-btn button:hover{ background:#0096c7; }
+
+        body > h1, body > form, body > table, body > h2, body > p, body > a, body > br{
+            margin-left:25px;
+            margin-right:25px;
+        }
+
+        h1{ margin-top:25px; }
+        h3{ margin-top:10px; }
+
+        form{
+            margin-top:15px;
+            padding:15px;
+            background:rgba(255,255,255,0.08);
+            border-radius:12px;
+            backdrop-filter:blur(6px);
+        }
+
+        input{ margin:5px 0; }
+
+        button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            background:#023e8a;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+            margin-top:10px;
+        }
+
+        button:hover{ background:#0353a4; }
+
+        table{
+            width:calc(100% - 50px);
+            margin-top:20px;
+            border-collapse:collapse;
+            background:rgba(255,255,255,0.08);
+            border-radius:12px;
+            overflow:hidden;
+        }
+
+        th, td{ padding:10px; text-align:center; }
+        th{ background:rgba(0,119,182,0.6); }
+        tr:nth-child(even){ background:rgba(255,255,255,0.12); }
+
+        .helper-text{ margin-left:25px; margin-top:10px; margin-bottom:10px; opacity:0.85; }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>Ricerca Posti · {{request.user.username}}</h2>
+    <div class="nav-actions">
+        <div class="nav-btn">
+            <a href="/passeggero/prenotazione/visualizza"><button>Visualizza Prenotazioni</button></a>
+        </div>
+        <div class="nav-btn">
+            <a href="/passeggero"><button>Ritorna alla Dashboard</button></a>
+        </div>
+    </div>
+</div>
+
+<h1>Ricerca Posti Disponibili</h1>
+
+<p class="helper-text">
+    Seleziona per filtrare, lascia vuoto per visualizzare tutti i posti disponibili.
+</p>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    <br><br>
+{% endif %}
+
+<form method="POST" action="/passeggero/prenotazione">
+
+    {% csrf_token %}
+
+    <h3>Itinerari</h3>
+
+    {% for i in itinerari %}
+        <label>
+            <input type="checkbox" name="itinerari" value="{{i.id}}">
+            <strong>{{i.destinazione}}</strong>
+            ({{i.data_inizio}} - {{i.data_fine}})
+        </label>
+
+        {% if i.scali %}
+            — Scali: {{ i.scali|join:", " }}
+        {% else %}
+            — Volo diretto
+        {% endif %}
+        <br>
+    {% endfor %}
+
+    <br><br>
+
+    <h3>Classe</h3>
+    <input type="checkbox" name="classe" value="Economy"> Economy
+    <br>
+    <input type="checkbox" name="classe" value="Business"> Business
+    <br>
+    <input type="checkbox" name="classe" value="First Class"> First Class
+
+    <br><br>
+
+    <h3>Tipologia posto</h3>
+    <input type="checkbox" name="tipologia" value="Finestrino"> Finestrino
+    <br>
+    <input type="checkbox" name="tipologia" value="Centrale"> Centrale
+    <br>
+    <input type="checkbox" name="tipologia" value="Corridoio"> Corridoio
+
+    <br><br>
+
+    <label for="data_inizio">Data inizio:</label>
+    <input type="date" name="data_inizio" id="data_inizio">
+
+    <br><br>
+
+    <label for="data_fine">Data fine:</label>
+    <input type="date" name="data_fine" id="data_fine">
+
+    <br><br>
+
+    <button type="submit">Cerca</button>
+
+</form>
+
+{% if risultati != None %}
+
+    <br><br>
+
+    <h2>Risultati</h2>
+
+    <table>
+        <tr>
+            <th>Codice ICAO</th>
+            <th>Modello Aereo</th>
+            <th>Numero</th>
+            <th>Classe</th>
+            <th>Tipologia</th>
+            <th>Azione</th>
+        </tr>
+
+        {% for r in risultati %}
+        <tr>
+            <td>{{r.Codice_ICAO}}</td>
+            <td>{{r.ModelloAereo}}</td>
+            <td>{{r.Numero}}</td>
+            <td>{{r.Classe}}</td>
+            <td>{{r.Tipologia}}</td>
+            <td>
+                <a href="/passeggero/prenotazione/aggiungi/{{r.Codice_ICAO}}/{{r.Numero}}">
+                    <button>Prenota</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endif %}
+
+</body>
+</html>

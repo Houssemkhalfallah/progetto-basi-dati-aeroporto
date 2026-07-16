@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizzazione Dati</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            color:white;
+        }
+
+        .card{
+            width:420px;
+            padding:35px;
+            background:rgba(255,255,255,0.12);
+            backdrop-filter:blur(10px);
+            border-radius:20px;
+            border:1px solid rgba(255,255,255,0.18);
+            box-shadow:0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        h1{ text-align:center; margin-bottom:25px; font-size:26px; }
+
+        .info{
+            margin-bottom:12px;
+            padding:10px;
+            background:rgba(255,255,255,0.08);
+            border-radius:10px;
+        }
+
+        .label{ font-weight:bold; color:#90e0ef; }
+        .value{ margin-top:3px; }
+
+        .btn{ margin-top:25px; width:100%; }
+
+        button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:10px;
+            background:#0077b6;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        button:hover{ background:#0096c7; transform:translateY(-2px); }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Visualizzazione Dati</h1>
+
+    <div class="info">
+        <div class="label">Codice Fiscale</div>
+        <div class="value">{{passeggero.codice_fiscale}}</div>
+    </div>
+
+    <div class="info">
+        <div class="label">Nome</div>
+        <div class="value">{{passeggero.nome}}</div>
+    </div>
+
+    <div class="info">
+        <div class="label">Cognome</div>
+        <div class="value">{{passeggero.cognome}}</div>
+    </div>
+
+    <div class="info">
+        <div class="label">Data Nascita</div>
+        <div class="value">{{passeggero.data_nascita}}</div>
+    </div>
+
+    <div class="info">
+        <div class="label">Telefono</div>
+        <div class="value">{{passeggero.telefono}}</div>
+    </div>
+
+    <div class="btn">
+        <a href="/passeggero">
+            <button>OK</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

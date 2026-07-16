@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Passeggero</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial;
+        }
+
+        body{
+            min-height:100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:rgba(0,0,0,0.5);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.15);
+        }
+
+        .title{
+            font-weight:bold;
+        }
+
+        .menu{
+            display:flex;
+            gap:20px;
+        }
+
+        .dropdown{
+            position:relative;
+            display:inline-block;
+        }
+
+        .dropbtn{
+            background:transparent;
+            border:none;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+            padding:10px 12px;
+            transition:0.2s;
+        }
+
+        .dropbtn:hover{
+            color:#90e0ef;
+        }
+
+        .dropdown-content{
+            display:none;
+            position:absolute;
+            top:100%;
+            left:0;
+            background:rgba(0,0,0,0.85);
+            min-width:220px;
+            border-radius:10px;
+            overflow:hidden;
+            box-shadow:0 8px 16px rgba(0,0,0,0.4);
+            z-index:10;
+        }
+
+        .dropdown-content a{
+            display:block;
+            padding:10px;
+            text-decoration:none;
+            color:white;
+            transition:0.2s;
+        }
+
+        .dropdown-content a:hover{
+            background:rgba(0,180,255,0.2);
+        }
+
+        .dropdown:hover .dropdown-content{
+            display:block;
+        }
+
+        .container{
+            padding:60px 20px;
+            text-align:center;
+        }
+
+        h1{
+            margin-bottom:20px;
+        }
+
+        .messages{
+            margin:20px auto;
+            width:60%;
+            background:rgba(0,180,255,0.18);
+            border:1px solid rgba(0,180,255,0.3);
+            padding:12px;
+            border-radius:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <div class="title">
+        Passeggero · {{request.user.username}}
+    </div>
+
+    <div class="menu">
+
+        <div class="dropdown">
+            <button class="dropbtn">Gestione Prenotazioni ▾</button>
+            <div class="dropdown-content">
+                <a href="/passeggero/prenotazione">Cerca Posti</a>
+                <a href="/passeggero/prenotazione/visualizza">Visualizza Prenotazioni</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Gestione Dati ▾</button>
+            <div class="dropdown-content">
+                <a href="/passeggero/visualizza">Visualizza Dati</a>
+                <a href="/passeggero/aggiungi">Aggiungi Dati</a>
+                <a href="/passeggero/modifica">Modifica Dati</a>
+                <a href="/passeggero/elimina">Elimina Dati</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Gestione Account ▾</button>
+            <div class="dropdown-content">
+                <a href="/modifica_password">Modifica Password</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <h1>Benvenuto nell'area passeggeri</h1>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <p>Seleziona un'operazione dalla barra in alto.</p>
+
+</div>
+
+</body>
+</html>

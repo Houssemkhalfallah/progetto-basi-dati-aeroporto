@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Assegnazione Gate</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:rgba(0,0,0,0.5);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.15);
+        }
+
+        .title{ font-weight:bold; }
+        .nav-buttons{ display:flex; gap:10px; }
+        .nav-buttons a{ text-decoration:none; }
+
+        .nav-buttons button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            background:#0077b6;
+            color:white;
+            transition:0.2s;
+        }
+
+        .nav-buttons button:hover{ background:#0096c7; }
+
+        .container{ flex:1; padding:25px; }
+
+        h1{ margin-bottom:20px; }
+
+        .messages{
+            margin-bottom:20px;
+            background:rgba(255,255,255,0.08);
+            padding:12px;
+            border-radius:10px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:rgba(255,255,255,0.08);
+            border-radius:14px;
+            overflow:hidden;
+            backdrop-filter:blur(6px);
+        }
+
+        th, td{ padding:14px; text-align:center; }
+        th{ background:rgba(0,119,182,0.55); font-size:15px; }
+        tr:nth-child(even){ background:rgba(255,255,255,0.10); }
+
+        select{
+            padding:8px;
+            border-radius:8px;
+            border:none;
+            background:rgba(255,255,255,0.92);
+        }
+
+        td button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            background:#023e8a;
+            color:white;
+            transition:0.2s;
+        }
+
+        td button:hover{ background:#0353a4; }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="title">Assegnazione Aerei ai Gate</div>
+    <div class="nav-buttons">
+        <a href="/gate/assegnazione/visualizza"><button type="button">Visualizza Aerei Assegnati</button></a>
+        <a href="/gate"><button type="button">Ritorna alla Dashboard</button></a>
+    </div>
+</div>
+
+<div class="container">
+
+    <h1>Aerei non ancora assegnati a un gate</h1>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="/gate/assegnazione">
+
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>Codice ICAO</th>
+                <th>Modello</th>
+                <th>Compagnia</th>
+                <th>Tipo</th>
+                <th>Lunghezza</th>
+                <th>Gate</th>
+                <th>Azioni</th>
+            </tr>
+
+            {% for item in aerei_con_gate %}
+            <tr>
+                <td>{{item.aereo.codice_icao}}</td>
+                <td>{{item.aereo.modello}}</td>
+                <td>{{item.aereo.compagnia}}</td>
+                <td>{{item.aereo.tipo}}</td>
+                <td>{{item.aereo.lunghezza}}</td>
+                <td>
+                    <select name="gate_{{item.aereo.codice_icao}}" id="gate_{{item.aereo.codice_icao}}">
+                        <option value="">Nessuno</option>
+                        {% for g in item.gates %}
+                        <option value="{{g.numero}}|{{g.terminal}}">{{g.numero}}/{{g.terminal}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" name="codice_icao" value="{{item.aereo.codice_icao}}">
+                        Assegna
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </form>
+
+</div>
+
+</body>
+</html>

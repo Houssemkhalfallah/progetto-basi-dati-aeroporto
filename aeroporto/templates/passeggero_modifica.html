@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifica Passeggero</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .card{
+            width:480px;
+            padding:35px;
+            background:rgba(255,255,255,0.10);
+            border-radius:20px;
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.18);
+            box-shadow:0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        h1{ text-align:center; margin-bottom:25px; font-size:28px; }
+
+        form{ display:flex; flex-direction:column; }
+
+        label{ margin-bottom:8px; font-weight:bold; }
+
+        input{
+            margin-bottom:20px;
+            padding:10px 12px;
+            border:none;
+            border-radius:10px;
+            background:rgba(255,255,255,0.92);
+            font-size:14px;
+        }
+
+        .button-group{ display:flex; gap:10px; }
+
+        button{
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:0.2s;
+        }
+
+        .primary{ background:#0077b6; color:white; }
+        .primary:hover{ background:#0096c7; transform:translateY(-2px); }
+
+        .secondary{ background:#023e8a; color:white; }
+        .secondary:hover{ background:#0353a4; transform:translateY(-2px); }
+
+        .cancel{ margin-top:18px; text-align:center; }
+        .cancel button{ background:rgba(255,255,255,0.15); color:white; }
+        .cancel button:hover{ background:rgba(255,255,255,0.25); transform:translateY(-2px); }
+
+        .error{ color:#ffb4b4; margin-bottom:15px; font-weight:bold; }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Modifica Dati Passeggero</h1>
+
+    {% if error %}
+        <div class="error">Errore: {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/passeggero/modifica">
+
+        {% csrf_token %}
+
+        <label for="codice_fiscale">Codice Fiscale:</label>
+        <input type="text" id="codice_fiscale" name="codice_fiscale" maxlength="16" value="{{passeggero.codice_fiscale}}" required>
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="{{passeggero.nome}}" required>
+
+        <label for="cognome">Cognome:</label>
+        <input type="text" id="cognome" name="cognome" value="{{passeggero.cognome}}" required>
+
+        <label for="data_nascita">Data di nascita:</label>
+        <input type="date" id="data_nascita" name="data_nascita" value="{{passeggero.data_nascita|date:'Y-m-d'}}" required>
+
+        <label for="telefono">Telefono:</label>
+        <input type="text" id="telefono" name="telefono" value="{{passeggero.telefono}}">
+
+        <div class="button-group">
+            <button type="submit" class="primary">Salva</button>
+            <button type="reset" class="secondary">Reset</button>
+        </div>
+
+    </form>
+
+    <div class="cancel">
+        <a href="/passeggero">
+            <button type="button">Annulla</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

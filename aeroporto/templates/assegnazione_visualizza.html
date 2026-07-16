@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aerei Assegnati</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:rgba(0,0,0,0.5);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.15);
+        }
+
+        .navbar h1{ font-size:20px; }
+        .navbar a{ text-decoration:none; }
+
+        .navbar button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            background:#0077b6;
+            color:white;
+            transition:0.2s;
+        }
+
+        .navbar button:hover{ background:#0096c7; }
+
+        .container{ flex:1; padding:25px; }
+
+        h1{ margin-bottom:20px; }
+
+        .messages{
+            margin-bottom:20px;
+            background:rgba(255,255,255,0.08);
+            padding:12px;
+            border-radius:10px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:rgba(255,255,255,0.08);
+            border-radius:14px;
+            overflow:hidden;
+            backdrop-filter:blur(6px);
+        }
+
+        th, td{ padding:14px; text-align:center; }
+        th{ background:rgba(0,119,182,0.55); font-size:15px; }
+        tr:nth-child(even){ background:rgba(255,255,255,0.10); }
+
+        td button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            background:#c1121f;
+            color:white;
+            transition:0.2s;
+        }
+
+        td button:hover{ background:#e5383b; }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h1>Aerei Assegnati ai Miei Gate</h1>
+    <a href="/gate/assegnazione"><button type="button">Assegna Aerei</button></a>
+</div>
+
+<div class="container">
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="/gate/assegnazione/visualizza">
+
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>Codice ICAO</th>
+                <th>Modello</th>
+                <th>Compagnia</th>
+                <th>Tipo</th>
+                <th>Numero Gate</th>
+                <th>Terminal</th>
+                <th>Azioni</th>
+            </tr>
+
+            {% for aereo in aerei %}
+            <tr>
+                <td>{{aereo.codice_icao}}</td>
+                <td>{{aereo.modello}}</td>
+                <td>{{aereo.compagnia}}</td>
+                <td>{{aereo.tipo}}</td>
+                <td>{{aereo.numero_gate}}</td>
+                <td>{{aereo.terminal_gate}}</td>
+                <td>
+                    <button type="submit" name="codice_icao" value="{{aereo.codice_icao}}">
+                        Rimuovi
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </form>
+
+</div>
+
+</body>
+</html>
