@@ -1,0 +1,7 @@
+Credenziali utenza per test:
+Username              Password         Ruolo
+Angelica              Passeggero-12    Passeggero
+carmine               gestoregate12    Gestore gate
+Sara_Conti            Merci2026Volo!   Gestore aerei trasporto merci
+Andrea_Russo          Voli2026Pass!    Gestore aerei passeggeri
+Elena_Greco           Deposito2026!    Gestore magazzino aeroportuale

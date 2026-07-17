@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -18,7 +19,12 @@
             justify-content: center;
             align-items: center;
 
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+           background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url('{% static "aeroporto/img/sfondo.jpg" %}');
+background-size: cover;
+background-position: center;
+background-attachment: fixed;
             color: white;
         }
 

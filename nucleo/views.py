@@ -75,16 +75,16 @@ def login_view(request):
         return render(request, 'login.html')
     username = request.POST.get('username')
     password = request.POST.get('password')
-    ip_limit = is_ratelimited(request, group='login_ip', key='ip', rate='5/5m', increment=False)
-    user_limit = is_ratelimited(request, group='login_user', key='post:username', rate='5/5m', increment=False)
+    ip_limit = is_ratelimited(request, group='login_ip', key='ip', rate='3/1m', increment=False)
+    user_limit = is_ratelimited(request, group='login_user', key='post:username', rate='3/1m', increment=False)
     if ip_limit or user_limit:
         return render(request, 'login.html', {'error': "Troppi tentativi di accesso. Riprova più tardi."})
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
         return redirect_by_role(request)
-    is_ratelimited(request, group='login_ip', key='ip', rate='5/5m', increment=True)
-    is_ratelimited(request, group='login_user', key='post:username', rate='5/5m', increment=True)
+    is_ratelimited(request, group='login_ip', key='ip', rate='3/1m', increment=True)
+    is_ratelimited(request, group='login_user', key='post:username', rate='3/1m', increment=True)
     return render(request, 'login.html', {'error': "Credenziali non valide"})
 
 @login_required
