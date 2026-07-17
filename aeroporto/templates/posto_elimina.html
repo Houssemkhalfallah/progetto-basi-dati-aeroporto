@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminazione Posto</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .card{
+            width:440px;
+            padding:35px;
+            text-align:center;
+            background:rgba(255,255,255,0.10);
+            border-radius:20px;
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.18);
+            box-shadow:0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        h1{ margin-bottom:25px; font-size:26px; }
+
+        .warning{
+            padding:16px;
+            margin-bottom:25px;
+            border-radius:12px;
+            background:rgba(255,80,80,0.18);
+            border:1px solid rgba(255,80,80,0.35);
+            line-height:1.6;
+        }
+
+        form{ margin-bottom:15px; }
+
+        button{
+            padding:10px 16px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:0.2s;
+        }
+
+        .danger{ background:#c1121f; color:white; }
+        .danger:hover{ background:#e5383b; transform:translateY(-2px); }
+
+        .cancel{ background:rgba(255,255,255,0.15); color:white; }
+        .cancel:hover{ background:rgba(255,255,255,0.25); transform:translateY(-2px); }
+
+        a{ text-decoration:none; }
+
+        .error{ color:#ffb4b4; margin-bottom:15px; font-weight:bold; }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Eliminazione Posto</h1>
+
+    {% if error %}
+        <div class="error">Errore: {{ error }}</div>
+    {% endif %}
+
+    <div class="warning">
+        Sei sicuro di voler eliminare il posto
+        <strong>{{numero}}</strong>
+        sull'aereo
+        <strong>{{codice_icao}}</strong>?
+    </div>
+
+    <form method="POST" action="/aereo_passeggeri/posto/elimina/{{codice_icao}}/{{numero}}">
+        {% csrf_token %}
+        <button type="submit" class="danger">Elimina</button>
+    </form>
+
+    <a href="/aereo_passeggeri/posto/{{codice_icao}}">
+        <button type="button" class="cancel">Annulla</button>
+    </a>
+
+</div>
+
+</body>
+</html>

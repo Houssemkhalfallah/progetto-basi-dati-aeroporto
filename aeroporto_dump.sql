@@ -224,6 +224,172 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
+-- Table structure for table `aeroporto_useraereo`
+--
+
+DROP TABLE IF EXISTS `aeroporto_useraereo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aeroporto_useraereo` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `aereo_id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `aeroporto_useraereo_user_id_aereo_id_31eb1be9_uniq` (`user_id`,`aereo_id`),
+  KEY `aeroporto_useraereo_aereo_id_67d1b1aa_fk_aereo_Codice_ICAO` (`aereo_id`),
+  CONSTRAINT `aeroporto_useraereo_aereo_id_67d1b1aa_fk_aereo_Codice_ICAO` FOREIGN KEY (`aereo_id`) REFERENCES `aereo` (`Codice_ICAO`),
+  CONSTRAINT `aeroporto_useraereo_user_id_9d46458f_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aeroporto_useraereo`
+--
+
+LOCK TABLES `aeroporto_useraereo` WRITE;
+/*!40000 ALTER TABLE `aeroporto_useraereo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aeroporto_useraereo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aeroporto_userassistentedivolo`
+--
+
+DROP TABLE IF EXISTS `aeroporto_userassistentedivolo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aeroporto_userassistentedivolo` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `assistente_id` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `aeroporto_userassistente_user_id_assistente_id_4ac42177_uniq` (`user_id`,`assistente_id`),
+  KEY `aeroporto_userassist_assistente_id_051d5dd6_fk_assistent` (`assistente_id`),
+  CONSTRAINT `aeroporto_userassist_assistente_id_051d5dd6_fk_assistent` FOREIGN KEY (`assistente_id`) REFERENCES `assistente_di_volo` (`Codice_fiscale`),
+  CONSTRAINT `aeroporto_userassistentedivolo_user_id_f165799c_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aeroporto_userassistentedivolo`
+--
+
+LOCK TABLES `aeroporto_userassistentedivolo` WRITE;
+/*!40000 ALTER TABLE `aeroporto_userassistentedivolo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aeroporto_userassistentedivolo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aeroporto_usergate`
+--
+
+DROP TABLE IF EXISTS `aeroporto_usergate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aeroporto_usergate` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `numero_gate` int NOT NULL,
+  `terminal_gate` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `aeroporto_usergate_user_id_numero_gate_term_a98b9b32_uniq` (`user_id`,`numero_gate`,`terminal_gate`),
+  CONSTRAINT `aeroporto_usergate_user_id_0a9e543d_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aeroporto_usergate`
+--
+
+LOCK TABLES `aeroporto_usergate` WRITE;
+/*!40000 ALTER TABLE `aeroporto_usergate` DISABLE KEYS */;
+INSERT INTO `aeroporto_usergate` VALUES (2,3,'T2',4),(3,7,'T1',4),(1,12,'T1',4);
+/*!40000 ALTER TABLE `aeroporto_usergate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aeroporto_useritinerario`
+--
+
+DROP TABLE IF EXISTS `aeroporto_useritinerario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aeroporto_useritinerario` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `itinerario_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `aeroporto_useritinerario_user_id_itinerario_id_537c8a00_uniq` (`user_id`,`itinerario_id`),
+  KEY `aeroporto_useritinerario_itinerario_id_0eea3d3c_fk_itinerario_ID` (`itinerario_id`),
+  CONSTRAINT `aeroporto_useritinerario_itinerario_id_0eea3d3c_fk_itinerario_ID` FOREIGN KEY (`itinerario_id`) REFERENCES `itinerario` (`ID`),
+  CONSTRAINT `aeroporto_useritinerario_user_id_3b083bb9_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aeroporto_useritinerario`
+--
+
+LOCK TABLES `aeroporto_useritinerario` WRITE;
+/*!40000 ALTER TABLE `aeroporto_useritinerario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aeroporto_useritinerario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aeroporto_usermagazzinoaeroportuale`
+--
+
+DROP TABLE IF EXISTS `aeroporto_usermagazzinoaeroportuale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aeroporto_usermagazzinoaeroportuale` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome_magazzino` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `posizione_magazzino` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `aeroporto_usermagazzinoa_user_id_nome_magazzino_p_546b88ec_uniq` (`user_id`,`nome_magazzino`,`posizione_magazzino`),
+  CONSTRAINT `aeroporto_usermagazz_user_id_8e8fd1c2_fk_auth_user` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aeroporto_usermagazzinoaeroportuale`
+--
+
+LOCK TABLES `aeroporto_usermagazzinoaeroportuale` WRITE;
+/*!40000 ALTER TABLE `aeroporto_usermagazzinoaeroportuale` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aeroporto_usermagazzinoaeroportuale` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aeroporto_userpasseggero`
+--
+
+DROP TABLE IF EXISTS `aeroporto_userpasseggero`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aeroporto_userpasseggero` (
+  `user_id` int NOT NULL,
+  `passeggero_id` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `passeggero_id` (`passeggero_id`),
+  CONSTRAINT `aeroporto_userpasseg_passeggero_id_154a5e03_fk_passegger` FOREIGN KEY (`passeggero_id`) REFERENCES `passeggero` (`Codice_fiscale`),
+  CONSTRAINT `aeroporto_userpasseggero_user_id_c0a85011_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aeroporto_userpasseggero`
+--
+
+LOCK TABLES `aeroporto_userpasseggero` WRITE;
+/*!40000 ALTER TABLE `aeroporto_userpasseggero` DISABLE KEYS */;
+INSERT INTO `aeroporto_userpasseggero` VALUES (2,'khlhsm01r07f923e');
+/*!40000 ALTER TABLE `aeroporto_userpasseggero` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `assistente_di_volo`
 --
 
@@ -380,7 +546,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -389,7 +555,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',3,'add_permission'),(6,'Can change permission',3,'change_permission'),(7,'Can delete permission',3,'delete_permission'),(8,'Can view permission',3,'view_permission'),(9,'Can add group',2,'add_group'),(10,'Can change group',2,'change_group'),(11,'Can delete group',2,'delete_group'),(12,'Can view group',2,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',3,'add_permission'),(6,'Can change permission',3,'change_permission'),(7,'Can delete permission',3,'delete_permission'),(8,'Can view permission',3,'view_permission'),(9,'Can add group',2,'add_group'),(10,'Can change group',2,'change_group'),(11,'Can delete group',2,'delete_group'),(12,'Can view group',2,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add container aereo',9,'add_containeraereo'),(26,'Can change container aereo',9,'change_containeraereo'),(27,'Can delete container aereo',9,'delete_containeraereo'),(28,'Can view container aereo',9,'view_containeraereo'),(29,'Can add gate',10,'add_gate'),(30,'Can change gate',10,'change_gate'),(31,'Can delete gate',10,'delete_gate'),(32,'Can view gate',10,'view_gate'),(33,'Can add lingua',12,'add_lingua'),(34,'Can change lingua',12,'change_lingua'),(35,'Can delete lingua',12,'delete_lingua'),(36,'Can view lingua',12,'view_lingua'),(37,'Can add magazzino aeroportuale',13,'add_magazzinoaeroportuale'),(38,'Can change magazzino aeroportuale',13,'change_magazzinoaeroportuale'),(39,'Can delete magazzino aeroportuale',13,'delete_magazzinoaeroportuale'),(40,'Can view magazzino aeroportuale',13,'view_magazzinoaeroportuale'),(41,'Can add posto',16,'add_posto'),(42,'Can change posto',16,'change_posto'),(43,'Can delete posto',16,'delete_posto'),(44,'Can view posto',16,'view_posto'),(45,'Can add prenotazione',17,'add_prenotazione'),(46,'Can change prenotazione',17,'change_prenotazione'),(47,'Can delete prenotazione',17,'delete_prenotazione'),(48,'Can view prenotazione',17,'view_prenotazione'),(49,'Can add scali',18,'add_scali'),(50,'Can change scali',18,'change_scali'),(51,'Can delete scali',18,'delete_scali'),(52,'Can view scali',18,'view_scali'),(53,'Can add merce',14,'add_merce'),(54,'Can change merce',14,'change_merce'),(55,'Can delete merce',14,'delete_merce'),(56,'Can view merce',14,'view_merce'),(57,'Can add stoccaggio',19,'add_stoccaggio'),(58,'Can change stoccaggio',19,'change_stoccaggio'),(59,'Can delete stoccaggio',19,'delete_stoccaggio'),(60,'Can view stoccaggio',19,'view_stoccaggio'),(61,'Can add user aereo',20,'add_useraereo'),(62,'Can change user aereo',20,'change_useraereo'),(63,'Can delete user aereo',20,'delete_useraereo'),(64,'Can view user aereo',20,'view_useraereo'),(65,'Can add aereo',7,'add_aereo'),(66,'Can change aereo',7,'change_aereo'),(67,'Can delete aereo',7,'delete_aereo'),(68,'Can view aereo',7,'view_aereo'),(69,'Can add user itinerario',23,'add_useritinerario'),(70,'Can change user itinerario',23,'change_useritinerario'),(71,'Can delete user itinerario',23,'delete_useritinerario'),(72,'Can view user itinerario',23,'view_useritinerario'),(73,'Can add user assistente di volo',21,'add_userassistentedivolo'),(74,'Can change user assistente di volo',21,'change_userassistentedivolo'),(75,'Can delete user assistente di volo',21,'delete_userassistentedivolo'),(76,'Can view user assistente di volo',21,'view_userassistentedivolo'),(77,'Can add user magazzino aeroportuale',24,'add_usermagazzinoaeroportuale'),(78,'Can change user magazzino aeroportuale',24,'change_usermagazzinoaeroportuale'),(79,'Can delete user magazzino aeroportuale',24,'delete_usermagazzinoaeroportuale'),(80,'Can view user magazzino aeroportuale',24,'view_usermagazzinoaeroportuale'),(81,'Can add itinerario',11,'add_itinerario'),(82,'Can change itinerario',11,'change_itinerario'),(83,'Can delete itinerario',11,'delete_itinerario'),(84,'Can view itinerario',11,'view_itinerario'),(85,'Can add assistente di volo',8,'add_assistentedivolo'),(86,'Can change assistente di volo',8,'change_assistentedivolo'),(87,'Can delete assistente di volo',8,'delete_assistentedivolo'),(88,'Can view assistente di volo',8,'view_assistentedivolo'),(89,'Can add user gate',22,'add_usergate'),(90,'Can change user gate',22,'change_usergate'),(91,'Can delete user gate',22,'delete_usergate'),(92,'Can view user gate',22,'view_usergate'),(93,'Can add passeggero',15,'add_passeggero'),(94,'Can change passeggero',15,'change_passeggero'),(95,'Can delete passeggero',15,'delete_passeggero'),(96,'Can view passeggero',15,'view_passeggero'),(97,'Can add user passeggero',25,'add_userpasseggero'),(98,'Can change user passeggero',25,'change_userpasseggero'),(99,'Can delete user passeggero',25,'delete_userpasseggero'),(100,'Can view user passeggero',25,'view_userpasseggero');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -414,7 +580,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -423,7 +589,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$1200000$KmSqrx65onu6ZviSqx6miD$6M85IHSjAKklZAJnvV3Jvwi1DOop63w0OkKukdODmTs=','2026-07-16 20:52:13.651810',1,'houss','','','houssemkhalfallah39@gmail.com',1,1,'2026-07-16 20:08:29.741584'),(2,'pbkdf2_sha256$1200000$z0pYy2vMXuSYWb6BMUdLLg$CAVeeYC2UklSOaQFyuWp2k7wt+dyx+PsNwCpr9iJIR0=','2026-07-16 20:45:35.933375',0,'Angelica','','','',0,1,'2026-07-16 20:43:39.947324'),(3,'pbkdf2_sha256$1200000$MTq7PDV7Nr3QswSRBYZps8$2HApoqNCIFNtSYNB/aeXyGPlaZKLFRg57+XrGJZPwsI=','2026-07-16 21:05:05.630541',0,'nicola','','','',0,1,'2026-07-16 21:04:19.747613');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$1200000$KmSqrx65onu6ZviSqx6miD$6M85IHSjAKklZAJnvV3Jvwi1DOop63w0OkKukdODmTs=','2026-07-16 20:52:13.651810',1,'houss','','','houssemkhalfallah39@gmail.com',1,1,'2026-07-16 20:08:29.741584'),(2,'pbkdf2_sha256$1200000$z0pYy2vMXuSYWb6BMUdLLg$CAVeeYC2UklSOaQFyuWp2k7wt+dyx+PsNwCpr9iJIR0=','2026-07-16 23:03:44.671940',0,'Angelica','','','',0,1,'2026-07-16 20:43:39.947324'),(3,'pbkdf2_sha256$1200000$MTq7PDV7Nr3QswSRBYZps8$2HApoqNCIFNtSYNB/aeXyGPlaZKLFRg57+XrGJZPwsI=','2026-07-16 21:05:05.630541',0,'nicola','','','',0,1,'2026-07-16 21:04:19.747613'),(4,'pbkdf2_sha256$1200000$jJmoLNZZOBB9KvmXWcShq0$BANwNZ8tjXS9GLLYP2QGC8RdEF5xrhb87k26jiyzSgo=','2026-07-17 06:06:33.395183',0,'carmine','','','',0,1,'2026-07-17 06:06:02.572971');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,7 +609,7 @@ CREATE TABLE `auth_user_groups` (
   KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
   CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -452,7 +618,7 @@ CREATE TABLE `auth_user_groups` (
 
 LOCK TABLES `auth_user_groups` WRITE;
 /*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
-INSERT INTO `auth_user_groups` VALUES (1,2,1),(2,3,1);
+INSERT INTO `auth_user_groups` VALUES (1,2,1),(2,3,1),(3,4,2);
 /*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -719,7 +885,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -728,7 +894,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(2,'auth','group'),(3,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(6,'sessions','session');
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(7,'aeroporto','aereo'),(8,'aeroporto','assistentedivolo'),(9,'aeroporto','containeraereo'),(10,'aeroporto','gate'),(11,'aeroporto','itinerario'),(12,'aeroporto','lingua'),(13,'aeroporto','magazzinoaeroportuale'),(14,'aeroporto','merce'),(15,'aeroporto','passeggero'),(16,'aeroporto','posto'),(17,'aeroporto','prenotazione'),(18,'aeroporto','scali'),(19,'aeroporto','stoccaggio'),(20,'aeroporto','useraereo'),(21,'aeroporto','userassistentedivolo'),(22,'aeroporto','usergate'),(23,'aeroporto','useritinerario'),(24,'aeroporto','usermagazzinoaeroportuale'),(25,'aeroporto','userpasseggero'),(2,'auth','group'),(3,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(6,'sessions','session');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -745,7 +911,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -754,7 +920,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2026-07-16 18:37:51.056278'),(2,'auth','0001_initial','2026-07-16 18:37:51.455752'),(3,'admin','0001_initial','2026-07-16 18:37:51.582861'),(4,'admin','0002_logentry_remove_auto_add','2026-07-16 18:37:51.587173'),(5,'admin','0003_logentry_add_action_flag_choices','2026-07-16 18:37:51.590855'),(6,'contenttypes','0002_remove_content_type_name','2026-07-16 18:37:51.659518'),(7,'auth','0002_alter_permission_name_max_length','2026-07-16 18:37:51.702837'),(8,'auth','0003_alter_user_email_max_length','2026-07-16 18:37:51.713862'),(9,'auth','0004_alter_user_username_opts','2026-07-16 18:37:51.718563'),(10,'auth','0005_alter_user_last_login_null','2026-07-16 18:37:51.755036'),(11,'auth','0006_require_contenttypes_0002','2026-07-16 18:37:51.756838'),(12,'auth','0007_alter_validators_add_error_messages','2026-07-16 18:37:51.761106'),(13,'auth','0008_alter_user_username_max_length','2026-07-16 18:37:51.807948'),(14,'auth','0009_alter_user_last_name_max_length','2026-07-16 18:37:51.858861'),(15,'auth','0010_alter_group_name_max_length','2026-07-16 18:37:51.871345'),(16,'auth','0011_update_proxy_permissions','2026-07-16 18:37:51.875833'),(17,'auth','0012_alter_user_first_name_max_length','2026-07-16 18:37:51.918705'),(18,'sessions','0001_initial','2026-07-16 18:37:51.941821');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2026-07-16 18:37:51.056278'),(2,'auth','0001_initial','2026-07-16 18:37:51.455752'),(3,'admin','0001_initial','2026-07-16 18:37:51.582861'),(4,'admin','0002_logentry_remove_auto_add','2026-07-16 18:37:51.587173'),(5,'admin','0003_logentry_add_action_flag_choices','2026-07-16 18:37:51.590855'),(6,'contenttypes','0002_remove_content_type_name','2026-07-16 18:37:51.659518'),(7,'auth','0002_alter_permission_name_max_length','2026-07-16 18:37:51.702837'),(8,'auth','0003_alter_user_email_max_length','2026-07-16 18:37:51.713862'),(9,'auth','0004_alter_user_username_opts','2026-07-16 18:37:51.718563'),(10,'auth','0005_alter_user_last_login_null','2026-07-16 18:37:51.755036'),(11,'auth','0006_require_contenttypes_0002','2026-07-16 18:37:51.756838'),(12,'auth','0007_alter_validators_add_error_messages','2026-07-16 18:37:51.761106'),(13,'auth','0008_alter_user_username_max_length','2026-07-16 18:37:51.807948'),(14,'auth','0009_alter_user_last_name_max_length','2026-07-16 18:37:51.858861'),(15,'auth','0010_alter_group_name_max_length','2026-07-16 18:37:51.871345'),(16,'auth','0011_update_proxy_permissions','2026-07-16 18:37:51.875833'),(17,'auth','0012_alter_user_first_name_max_length','2026-07-16 18:37:51.918705'),(18,'sessions','0001_initial','2026-07-16 18:37:51.941821'),(19,'aeroporto','0001_initial','2026-07-16 23:09:04.072100');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -780,6 +946,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('eppg4rix1cwhs1vd12y9i3jcw7yybnld','.eJxVjDEOgzAMAP_iuYowJA4wdu8bkLFNoa0SicBU9e8VEkO73p3uDQPv2zzsxdZhUejBw-WXjSxPS4fQB6d7dpLTti6jOxJ32uJuWe11Pdu_wcxlhh4iia8nq9Aic6AGWVqqJXqpTdEQvVShrbpAHWKkaQyknXrl1segUwOfL9d7N3k:1wkbiT:pAHoje8KQAPTdsRnBE9rUYbHYCtKcqF4ykNpznHKoYg','2026-07-31 06:06:33.398646'),('gjvg1prbk2bvnq6txocuchenczrwv6pi','.eJxVjLsOwjAMAP_FM4oSu0ncjux8Q5XELimgVupjQvw7qtQB1rvTvaFP-1b7fdWlHwU6QLj8spzKU6dDyCNN99mUedqWMZsjMaddzW0WfV3P9m9Q01qhA27QkneKiJmGHDgphULYikoTLVPyMbSog3O2ZRskkrCnyL7EwJrh8wW5hTbF:1wkV7I:OFj-VxRwIYxM2WBgg2BFKLqeP-yB-18m4R-_B82qAls','2026-07-30 23:03:44.677672');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -807,6 +974,7 @@ CREATE TABLE `gate` (
 
 LOCK TABLES `gate` WRITE;
 /*!40000 ALTER TABLE `gate` DISABLE KEYS */;
+INSERT INTO `gate` VALUES (3,'T2','Trasporto merci',80),(7,'T1','Passeggeri',72),(12,'T1','Passeggeri',65);
 /*!40000 ALTER TABLE `gate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1066,6 +1234,7 @@ CREATE TABLE `passeggero` (
 
 LOCK TABLES `passeggero` WRITE;
 /*!40000 ALTER TABLE `passeggero` DISABLE KEYS */;
+INSERT INTO `passeggero` VALUES ('khlhsm01r07f923e','angelica','bianco','2001-10-06','3894420398');
 /*!40000 ALTER TABLE `passeggero` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1561,4 +1730,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-17  0:52:14
+-- Dump completed on 2026-07-17  8:49:31

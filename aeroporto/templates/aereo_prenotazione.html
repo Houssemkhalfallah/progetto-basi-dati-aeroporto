@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Gestione Magazzini</title>
+    <title>Prenotazioni Aereo</title>
 
     <style>
         *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
@@ -26,7 +26,6 @@
         }
 
         .title{ font-weight:bold; }
-        .nav-buttons{ display:flex; gap:10px; }
         .nav-buttons a{ text-decoration:none; }
 
         .nav-buttons button{
@@ -42,9 +41,7 @@
 
         .nav-buttons button:hover{ background:#0096c7; }
 
-        .container{ flex:1; padding:25px; overflow-x:auto; }
-
-        h1{ margin-bottom:20px; }
+        .container-wrap{ flex:1; padding:25px; overflow-x:auto; }
 
         .messages{
             margin-bottom:20px;
@@ -52,22 +49,6 @@
             padding:12px;
             border-radius:10px;
         }
-
-        .top-actions{ margin-bottom:20px; }
-        .top-actions a{ text-decoration:none; }
-
-        .top-actions button{
-            padding:10px 14px;
-            border:none;
-            border-radius:10px;
-            background:#023e8a;
-            color:white;
-            font-weight:bold;
-            cursor:pointer;
-            transition:0.2s;
-        }
-
-        .top-actions button:hover{ background:#0353a4; transform:translateY(-2px); }
 
         table{
             width:100%;
@@ -78,28 +59,22 @@
             backdrop-filter:blur(6px);
         }
 
-        th, td{ padding:14px; text-align:center; }
-        th{ background:rgba(0,119,182,0.55); font-size:15px; }
+        th, td{ padding:12px; text-align:center; white-space:nowrap; }
+        th{ background:rgba(0,119,182,0.55); font-size:14px; }
         tr:nth-child(even){ background:rgba(255,255,255,0.10); }
-
-        td a{ color:#90e0ef; text-decoration:none; font-weight:bold; margin:0 5px; }
-        td a:hover{ text-decoration:underline; }
     </style>
 </head>
 
 <body>
 
 <div class="navbar">
-    <div class="title">Gestione Magazzini · {{request.user.username}}</div>
+    <div class="title">Prenotazioni su {{codice_icao}}</div>
     <div class="nav-buttons">
-        <a href="/modifica_password"><button type="button">Modifica Password</button></a>
-        <a href="/logout"><button type="button">Logout</button></a>
+        <a href="/aereo_passeggeri"><button type="button">Ritorna alla Dashboard</button></a>
     </div>
 </div>
 
-<div class="container">
-
-    <h1>I miei magazzini</h1>
+<div class="container-wrap">
 
     {% if messages %}
         <div class="messages">
@@ -109,32 +84,24 @@
         </div>
     {% endif %}
 
-    <div class="top-actions">
-        <a href="/magazzino/aggiungi">
-            <button>Aggiungi Magazzino</button>
-        </a>
-    </div>
-
     <table>
         <tr>
-            <th>Nome</th>
-            <th>Posizione</th>
-            <th>Tipo</th>
-            <th>Capacità</th>
-            <th>Azioni</th>
+            <th>ID</th>
+            <th>Numero Posto</th>
+            <th>Codice Fiscale Passeggero</th>
+            <th>Data Inizio</th>
+            <th>Scadenza</th>
+            <th>Bagaglio Extra</th>
         </tr>
 
-        {% for m in magazzini %}
+        {% for p in prenotazioni %}
         <tr>
-            <td>{{m.nome}}</td>
-            <td>{{m.posizione}}</td>
-            <td>{{m.tipo}}</td>
-            <td>{{m.capacita}}</td>
-            <td>
-                <a href="/magazzino/modifica/{{m.nome}}/{{m.posizione}}">Modifica</a>
-                <a href="/magazzino/elimina/{{m.nome}}/{{m.posizione}}">Elimina</a>
-                <a href="/magazzino/stoccaggio/{{m.nome}}/{{m.posizione}}">Merci Stoccate</a>
-            </td>
+            <td>{{p.id}}</td>
+            <td>{{p.numero}}</td>
+            <td>{{p.codice_fiscale_id}}</td>
+            <td>{{p.data_inizio}}</td>
+            <td>{{p.scadenza}}</td>
+            <td>{% if p.bagaglio_extra %}Sì{% else %}No{% endif %}</td>
         </tr>
         {% endfor %}
     </table>

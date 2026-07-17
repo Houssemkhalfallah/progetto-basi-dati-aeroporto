@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aggiunta Posto</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .card{
+            width:420px;
+            padding:35px;
+            background:rgba(255,255,255,0.10);
+            border-radius:20px;
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.18);
+            box-shadow:0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        h1{ text-align:center; margin-bottom:25px; font-size:24px; }
+
+        form{ display:flex; flex-direction:column; }
+
+        label{ margin-bottom:8px; font-weight:bold; }
+
+        input, select{
+            margin-bottom:18px;
+            padding:10px 12px;
+            border:none;
+            border-radius:10px;
+            background:rgba(255,255,255,0.92);
+            font-size:14px;
+        }
+
+        .button-group{ display:flex; gap:10px; margin-top:5px; }
+
+        button{
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:0.2s;
+        }
+
+        .primary{ background:#0077b6; color:white; }
+        .primary:hover{ background:#0096c7; transform:translateY(-2px); }
+
+        .secondary{ background:#023e8a; color:white; }
+        .secondary:hover{ background:#0353a4; transform:translateY(-2px); }
+
+        .cancel{ margin-top:18px; text-align:center; }
+        .cancel button{ background:rgba(255,255,255,0.15); color:white; width:100%; }
+        .cancel button:hover{ background:rgba(255,255,255,0.25); transform:translateY(-2px); }
+
+        .error{ color:#ffb4b4; margin-bottom:15px; font-weight:bold; }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Aggiunta Posto su {{codice_icao}}</h1>
+
+    {% if error %}
+        <div class="error">Errore: {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/aereo_passeggeri/posto/aggiungi/{{codice_icao}}">
+
+        {% csrf_token %}
+
+        <label for="numero">Numero:</label>
+        <input type="number" id="numero" name="numero" min="1" required>
+
+        <label for="classe">Classe:</label>
+        <select id="classe" name="classe" required>
+            <option disabled selected value>---</option>
+            <option value="Economy">Economy</option>
+            <option value="Business">Business</option>
+            <option value="First Class">First Class</option>
+        </select>
+
+        <label for="tipologia">Tipologia:</label>
+        <select id="tipologia" name="tipologia" required>
+            <option disabled selected value>---</option>
+            <option value="Finestrino">Finestrino</option>
+            <option value="Centrale">Centrale</option>
+            <option value="Corridoio">Corridoio</option>
+        </select>
+
+        <div class="button-group">
+            <button type="submit" class="primary">Aggiungi</button>
+            <button type="reset" class="secondary">Reset</button>
+        </div>
+
+    </form>
+
+    <div class="cancel">
+        <a href="/aereo_passeggeri/posto/{{codice_icao}}">
+            <button type="button">Annulla</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

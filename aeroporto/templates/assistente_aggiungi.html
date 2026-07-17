@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aggiunta Assistente di Volo</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+            padding:30px 0;
+        }
+
+        .card{
+            width:500px;
+            padding:35px;
+            background:rgba(255,255,255,0.10);
+            border-radius:20px;
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.18);
+            box-shadow:0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        h1{ text-align:center; margin-bottom:25px; font-size:24px; }
+
+        form{ display:flex; flex-direction:column; }
+
+        label{ margin-bottom:8px; font-weight:bold; }
+
+        input, select{
+            margin-bottom:18px;
+            padding:10px 12px;
+            border:none;
+            border-radius:10px;
+            background:rgba(255,255,255,0.92);
+            font-size:14px;
+        }
+
+        .hint{ font-size:12px; opacity:0.75; margin:-12px 0 14px; }
+
+        .button-group{ display:flex; gap:10px; margin-top:5px; }
+
+        button{
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:0.2s;
+        }
+
+        .primary{ background:#0077b6; color:white; }
+        .primary:hover{ background:#0096c7; transform:translateY(-2px); }
+
+        .secondary{ background:#023e8a; color:white; }
+        .secondary:hover{ background:#0353a4; transform:translateY(-2px); }
+
+        .cancel{ margin-top:18px; text-align:center; }
+        .cancel button{ background:rgba(255,255,255,0.15); color:white; width:100%; }
+        .cancel button:hover{ background:rgba(255,255,255,0.25); transform:translateY(-2px); }
+
+        .error{ color:#ffb4b4; margin-bottom:15px; font-weight:bold; }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Aggiunta Assistente di Volo</h1>
+
+    {% if error %}
+        <div class="error">Errore: {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/aereo_passeggeri/assistente/aggiungi">
+
+        {% csrf_token %}
+
+        <label for="codice_fiscale">Codice Fiscale:</label>
+        <input type="text" id="codice_fiscale" name="codice_fiscale" maxlength="16" required>
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="cognome">Cognome:</label>
+        <input type="text" id="cognome" name="cognome" required>
+
+        <label for="data_nascita">Data di nascita:</label>
+        <input type="date" id="data_nascita" name="data_nascita" required>
+
+        <label for="numero_licenza">Numero licenza:</label>
+        <input type="number" min="1" id="numero_licenza" name="numero_licenza" required>
+
+        <label for="stipendio">Stipendio (€):</label>
+        <input type="number" step="any" min="0.0" id="stipendio" name="stipendio" required>
+
+        <label for="data_assunzione">Data assunzione:</label>
+        <input type="date" id="data_assunzione" name="data_assunzione" required>
+
+        <label for="valutazione">Valutazione (1-5):</label>
+        <input type="number" step="0.1" min="1.0" max="5.0" id="valutazione" name="valutazione" required>
+
+        <label for="id_itinerario">Itinerario (opzionale):</label>
+        <select id="id_itinerario" name="id_itinerario">
+            <option value="">Nessuno</option>
+            {% for ui in itinerari %}
+            <option value="{{ui.itinerario.id}}">{{ui.itinerario.destinazione}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="lingue">Lingue (lingua:livello, separate da virgola):</label>
+        <input type="text" id="lingue" name="lingue" placeholder="es. Inglese:C1, Francese:B2">
+
+        <div class="button-group">
+            <button type="submit" class="primary">Aggiungi</button>
+            <button type="reset" class="secondary">Reset</button>
+        </div>
+
+    </form>
+
+    <div class="cancel">
+        <a href="/aereo_passeggeri/assistente">
+            <button type="button">Annulla</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

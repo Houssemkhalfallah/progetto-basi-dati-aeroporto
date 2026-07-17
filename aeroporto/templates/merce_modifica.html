@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifica Merce</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+            padding:30px 0;
+        }
+
+        .card{
+            width:460px;
+            padding:35px;
+            background:rgba(255,255,255,0.10);
+            border-radius:20px;
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.18);
+            box-shadow:0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        h1{ text-align:center; margin-bottom:25px; font-size:24px; }
+
+        form{ display:flex; flex-direction:column; }
+
+        label{ margin-bottom:8px; font-weight:bold; }
+
+        input, select{
+            margin-bottom:18px;
+            padding:10px 12px;
+            border:none;
+            border-radius:10px;
+            background:rgba(255,255,255,0.92);
+            font-size:14px;
+        }
+
+        input[disabled]{ opacity:0.6; }
+
+        .button-group{ display:flex; gap:10px; margin-top:5px; }
+
+        button{
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:0.2s;
+        }
+
+        .primary{ background:#0077b6; color:white; }
+        .primary:hover{ background:#0096c7; transform:translateY(-2px); }
+
+        .secondary{ background:#023e8a; color:white; }
+        .secondary:hover{ background:#0353a4; transform:translateY(-2px); }
+
+        .cancel{ margin-top:18px; text-align:center; }
+        .cancel button{ background:rgba(255,255,255,0.15); color:white; width:100%; }
+        .cancel button:hover{ background:rgba(255,255,255,0.25); transform:translateY(-2px); }
+
+        .error{ color:#ffb4b4; margin-bottom:15px; font-weight:bold; }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Modifica Merce {{merce.sscc}}</h1>
+
+    {% if error %}
+        <div class="error">Errore: {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/aereo_merci/merce/modifica/{{merce.sscc}}">
+
+        {% csrf_token %}
+
+        <label for="sscc">SSCC:</label>
+        <input type="text" id="sscc" value="{{merce.sscc}}" disabled>
+
+        <label for="peso">Peso (kg):</label>
+        <input type="number" step="any" min="0.0" id="peso" name="peso" value="{{merce.peso}}" required>
+
+        <label for="paese">Paese di provenienza:</label>
+        <input type="text" id="paese" name="paese" value="{{merce.paese}}" required>
+
+        <label for="categoria">Categoria:</label>
+        <input type="text" id="categoria" name="categoria" value="{{merce.categoria}}" required>
+
+        <label for="id_container">Container:</label>
+        <select id="id_container" name="id_container" required>
+            {% for c in container %}
+            <option value="{{c.id}}" {% if c.id == merce.id_container_id %}selected{% endif %}>
+                {{c.id}}
+            </option>
+            {% endfor %}
+        </select>
+
+        <div class="button-group">
+            <button type="submit" class="primary">Salva</button>
+            <button type="reset" class="secondary">Reset</button>
+        </div>
+
+    </form>
+
+    <div class="cancel">
+        <a href="/aereo_merci/merce/{{merce.id_container_id}}">
+            <button type="button">Annulla</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

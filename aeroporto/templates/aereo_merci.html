@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Aerei Trasporto Merci</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:rgba(0,0,0,0.5);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.15);
+        }
+
+        .title{ font-weight:bold; }
+        .nav-buttons{ display:flex; gap:10px; }
+        .nav-buttons a{ text-decoration:none; }
+
+        .nav-buttons button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            background:#0077b6;
+            color:white;
+            transition:0.2s;
+        }
+
+        .nav-buttons button:hover{ background:#0096c7; }
+
+        .container{ flex:1; padding:25px; overflow-x:auto; }
+
+        h1{ margin-bottom:20px; }
+
+        .messages{
+            margin-bottom:20px;
+            background:rgba(255,255,255,0.08);
+            padding:12px;
+            border-radius:10px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:rgba(255,255,255,0.08);
+            border-radius:14px;
+            overflow:hidden;
+            backdrop-filter:blur(6px);
+        }
+
+        th, td{ padding:12px; text-align:center; white-space:nowrap; }
+        th{ background:rgba(0,119,182,0.55); font-size:14px; }
+        tr:nth-child(even){ background:rgba(255,255,255,0.10); }
+
+        td a{ color:#90e0ef; text-decoration:none; font-weight:bold; margin:0 5px; }
+        td a:hover{ text-decoration:underline; }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="title">Gestione Aerei Trasporto Merci · {{request.user.username}}</div>
+    <div class="nav-buttons">
+        <a href="/aereo_merci/aggiungi"><button type="button">Aggiungi Aereo</button></a>
+        <a href="/modifica_password"><button type="button">Modifica Password</button></a>
+        <a href="/logout"><button type="button">Logout</button></a>
+    </div>
+</div>
+
+<div class="container">
+
+    <h1>I miei aerei</h1>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <table>
+        <tr>
+            <th>Codice ICAO</th>
+            <th>Modello</th>
+            <th>Compagnia</th>
+            <th>Altezza</th>
+            <th>Lunghezza</th>
+            <th>Apertura alare</th>
+            <th>Peso Max</th>
+            <th>Capacità</th>
+            <th>Peso Occupato</th>
+            <th>Volume Occupato</th>
+            <th>Gate</th>
+            <th>Azioni</th>
+        </tr>
+
+        {% for rel in aerei %}
+        <tr>
+            <td>{{rel.aereo.codice_icao}}</td>
+            <td>{{rel.aereo.modello}}</td>
+            <td>{{rel.aereo.compagnia}}</td>
+            <td>{{rel.aereo.altezza}}</td>
+            <td>{{rel.aereo.lunghezza}}</td>
+            <td>{{rel.aereo.apertura_alare}}</td>
+            <td>{{rel.aereo.peso_max}}</td>
+            <td>{{rel.aereo.capacita}}</td>
+            <td>{{rel.aereo.peso_occupato}}</td>
+            <td>{{rel.aereo.volume_occupato}}</td>
+            <td>{{rel.aereo.numero_gate}}/{{rel.aereo.terminal_gate}}</td>
+            <td>
+                <a href="/aereo_merci/modifica/{{rel.aereo.codice_icao}}">Modifica</a>
+                <a href="/aereo_merci/elimina/{{rel.aereo.codice_icao}}">Elimina</a>
+                <a href="/aereo_merci/container/{{rel.aereo.codice_icao}}">Container</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

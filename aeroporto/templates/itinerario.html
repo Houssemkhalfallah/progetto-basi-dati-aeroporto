@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Gestione Magazzini</title>
+    <title>Gestione Itinerari</title>
 
     <style>
         *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
@@ -45,6 +45,7 @@
         .container{ flex:1; padding:25px; overflow-x:auto; }
 
         h1{ margin-bottom:20px; }
+        h2{ margin:25px 0 12px; font-size:18px; opacity:0.9; }
 
         .messages{
             margin-bottom:20px;
@@ -76,10 +77,11 @@
             border-radius:14px;
             overflow:hidden;
             backdrop-filter:blur(6px);
+            margin-bottom:20px;
         }
 
-        th, td{ padding:14px; text-align:center; }
-        th{ background:rgba(0,119,182,0.55); font-size:15px; }
+        th, td{ padding:12px; text-align:center; white-space:nowrap; }
+        th{ background:rgba(0,119,182,0.55); font-size:14px; }
         tr:nth-child(even){ background:rgba(255,255,255,0.10); }
 
         td a{ color:#90e0ef; text-decoration:none; font-weight:bold; margin:0 5px; }
@@ -90,16 +92,15 @@
 <body>
 
 <div class="navbar">
-    <div class="title">Gestione Magazzini · {{request.user.username}}</div>
+    <div class="title">Gestione Itinerari · {{request.user.username}}</div>
     <div class="nav-buttons">
-        <a href="/modifica_password"><button type="button">Modifica Password</button></a>
-        <a href="/logout"><button type="button">Logout</button></a>
+        <a href="/aereo_passeggeri"><button type="button">Ritorna alla Dashboard</button></a>
     </div>
 </div>
 
 <div class="container">
 
-    <h1>I miei magazzini</h1>
+    <h1>Elenco Itinerari</h1>
 
     {% if messages %}
         <div class="messages">
@@ -110,30 +111,67 @@
     {% endif %}
 
     <div class="top-actions">
-        <a href="/magazzino/aggiungi">
-            <button>Aggiungi Magazzino</button>
+        <a href="/aereo_passeggeri/itinerario/aggiungi">
+            <button>Aggiungi Itinerario</button>
         </a>
     </div>
 
+    <h2>Itinerari modificabili</h2>
+
     <table>
         <tr>
-            <th>Nome</th>
-            <th>Posizione</th>
-            <th>Tipo</th>
-            <th>Capacità</th>
+            <th>ID</th>
+            <th>Destinazione</th>
+            <th>Data Inizio</th>
+            <th>Data Fine</th>
+            <th>Prezzo</th>
+            <th>Scali</th>
             <th>Azioni</th>
         </tr>
 
-        {% for m in magazzini %}
+        {% for i in itinerari_modificabili %}
         <tr>
-            <td>{{m.nome}}</td>
-            <td>{{m.posizione}}</td>
-            <td>{{m.tipo}}</td>
-            <td>{{m.capacita}}</td>
+            <td>{{i.id}}</td>
+            <td>{{i.destinazione}}</td>
+            <td>{{i.data_inizio}}</td>
+            <td>{{i.data_fine}}</td>
+            <td>{{i.prezzo}}</td>
             <td>
-                <a href="/magazzino/modifica/{{m.nome}}/{{m.posizione}}">Modifica</a>
-                <a href="/magazzino/elimina/{{m.nome}}/{{m.posizione}}">Elimina</a>
-                <a href="/magazzino/stoccaggio/{{m.nome}}/{{m.posizione}}">Merci Stoccate</a>
+                {% for scalo in i.scali %}
+                    {{scalo}}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                <a href="/aereo_passeggeri/itinerario/modifica/{{i.id}}">Modifica</a>
+                <a href="/aereo_passeggeri/itinerario/elimina/{{i.id}}">Elimina</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Itinerari di altri gestori</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Destinazione</th>
+            <th>Data Inizio</th>
+            <th>Data Fine</th>
+            <th>Prezzo</th>
+            <th>Scali</th>
+        </tr>
+
+        {% for i in itinerari_non_modificabili %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.destinazione}}</td>
+            <td>{{i.data_inizio}}</td>
+            <td>{{i.data_fine}}</td>
+            <td>{{i.prezzo}}</td>
+            <td>
+                {% for scalo in i.scali %}
+                    {{scalo}}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
             </td>
         </tr>
         {% endfor %}

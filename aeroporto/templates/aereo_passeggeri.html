@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Aerei Passeggeri</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:rgba(0,0,0,0.5);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.15);
+        }
+
+        .title{ font-weight:bold; }
+        .menu{ display:flex; gap:20px; }
+        .dropdown{ position:relative; display:inline-block; }
+
+        .dropbtn{
+            background:transparent;
+            border:none;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+            padding:10px 12px;
+            transition:0.2s;
+        }
+
+        .dropbtn:hover{ color:#90e0ef; }
+
+        .dropdown-content{
+            display:none;
+            position:absolute;
+            top:100%;
+            left:0;
+            background:rgba(0,0,0,0.85);
+            min-width:220px;
+            border-radius:10px;
+            overflow:hidden;
+            box-shadow:0 8px 16px rgba(0,0,0,0.4);
+            z-index:10;
+        }
+
+        .dropdown-content a{
+            display:block;
+            padding:10px;
+            text-decoration:none;
+            color:white;
+            transition:0.2s;
+        }
+
+        .dropdown-content a:hover{ background:rgba(0,180,255,0.2); }
+        .dropdown:hover .dropdown-content{ display:block; }
+
+        .container{ flex:1; padding:25px; overflow-x:auto; }
+
+        h1{ margin-bottom:20px; }
+
+        .messages{
+            margin-bottom:20px;
+            background:rgba(255,255,255,0.08);
+            padding:12px;
+            border-radius:10px;
+        }
+
+        .top-actions{ margin-bottom:20px; }
+        .top-actions a{ text-decoration:none; }
+
+        .top-actions button{
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            background:#023e8a;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .top-actions button:hover{ background:#0353a4; transform:translateY(-2px); }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:rgba(255,255,255,0.08);
+            border-radius:14px;
+            overflow:hidden;
+            backdrop-filter:blur(6px);
+        }
+
+        th, td{ padding:12px; text-align:center; white-space:nowrap; }
+        th{ background:rgba(0,119,182,0.55); font-size:14px; }
+        tr:nth-child(even){ background:rgba(255,255,255,0.10); }
+
+        td a{ color:#90e0ef; text-decoration:none; font-weight:bold; margin:0 5px; }
+        td a:hover{ text-decoration:underline; }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <div class="title">Gestione Aerei Passeggeri · {{request.user.username}}</div>
+
+    <div class="menu">
+
+        <div class="dropdown">
+            <button class="dropbtn">Gestione Itinerari ▾</button>
+            <div class="dropdown-content">
+                <a href="/aereo_passeggeri/itinerario">Elenco Itinerari</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Gestione Assistenti ▾</button>
+            <div class="dropdown-content">
+                <a href="/aereo_passeggeri/assistente">Elenco Assistenti</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Gestione Account ▾</button>
+            <div class="dropdown-content">
+                <a href="/modifica_password">Modifica Password</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <h1>I miei aerei passeggeri</h1>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="top-actions">
+        <a href="/aereo_passeggeri/aggiungi">
+            <button>Aggiungi Aereo</button>
+        </a>
+    </div>
+
+    <table>
+        <tr>
+            <th>Codice ICAO</th>
+            <th>Modello</th>
+            <th>Compagnia</th>
+            <th>Altezza</th>
+            <th>Lunghezza</th>
+            <th>Apertura alare</th>
+            <th>Capienza</th>
+            <th>Itinerario</th>
+            <th>Gate</th>
+            <th>Azioni</th>
+        </tr>
+
+        {% for rel in aerei %}
+        <tr>
+            <td>{{rel.aereo.codice_icao}}</td>
+            <td>{{rel.aereo.modello}}</td>
+            <td>{{rel.aereo.compagnia}}</td>
+            <td>{{rel.aereo.altezza}}</td>
+            <td>{{rel.aereo.lunghezza}}</td>
+            <td>{{rel.aereo.apertura_alare}}</td>
+            <td>{{rel.aereo.capienza}}</td>
+            <td>{{rel.aereo.id_itinerario_id}}</td>
+            <td>{{rel.aereo.numero_gate}}/{{rel.aereo.terminal_gate}}</td>
+            <td>
+                <a href="/aereo_passeggeri/modifica/{{rel.aereo.codice_icao}}">Modifica</a>
+                <a href="/aereo_passeggeri/elimina/{{rel.aereo.codice_icao}}">Elimina</a>
+                <a href="/aereo_passeggeri/posto/{{rel.aereo.codice_icao}}">Posti</a>
+                <a href="/aereo_passeggeri/prenotazione/{{rel.aereo.codice_icao}}">Prenotazioni</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aggiunta Merce a Magazzino</title>
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color:white;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:rgba(0,0,0,0.5);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.15);
+        }
+
+        .title{ font-weight:bold; }
+        .nav-buttons a{ text-decoration:none; }
+
+        .nav-buttons button{
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            background:#0077b6;
+            color:white;
+            transition:0.2s;
+        }
+
+        .nav-buttons button:hover{ background:#0096c7; }
+
+        .container{ flex:1; padding:25px; overflow-x:auto; }
+
+        h1{ margin-bottom:20px; font-size:20px; }
+
+        .error{
+            color:#ffb4b4;
+            margin-bottom:20px;
+            font-weight:bold;
+            background:rgba(255,0,0,0.1);
+            padding:10px;
+            border-radius:10px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:rgba(255,255,255,0.08);
+            border-radius:14px;
+            overflow:hidden;
+            backdrop-filter:blur(6px);
+            margin-bottom:20px;
+        }
+
+        th, td{ padding:12px; text-align:center; }
+        th{ background:rgba(0,119,182,0.55); font-size:14px; }
+        tr:nth-child(even){ background:rgba(255,255,255,0.10); }
+
+        .buttons{ display:flex; gap:10px; margin-bottom:15px; }
+
+        button{
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:0.2s;
+        }
+
+        .primary{ background:#0077b6; color:white; }
+        .primary:hover{ background:#0096c7; transform:translateY(-2px); }
+
+        .secondary{ background:#023e8a; color:white; }
+        .secondary:hover{ background:#0353a4; transform:translateY(-2px); }
+
+        .cancel button{ background:rgba(255,255,255,0.15); color:white; }
+        .cancel button:hover{ background:rgba(255,255,255,0.25); transform:translateY(-2px); }
+
+        .cancel a{ text-decoration:none; }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="title">Elenco merci stoccabili in {{nome}} — {{posizione}}</div>
+    <div class="nav-buttons">
+        <a href="/magazzino"><button type="button">Ritorna alla Dashboard</button></a>
+    </div>
+</div>
+
+<div class="container">
+
+    {% if error %}
+        <div class="error">Errore: {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/magazzino/stoccaggio/aggiungi/{{nome}}/{{posizione}}">
+
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>SSCC</th>
+                <th>Peso</th>
+                <th>Paese</th>
+                <th>Categoria</th>
+                <th>Stocca</th>
+            </tr>
+
+            {% for m in merce %}
+            <tr>
+                <td>{{m.sscc}}</td>
+                <td>{{m.peso}}</td>
+                <td>{{m.paese}}</td>
+                <td>{{m.categoria}}</td>
+                <td>
+                    <input type="checkbox" name="merci" id="m_{{m.sscc}}" value="{{m.sscc}}">
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="buttons">
+            <button type="submit" class="primary">Aggiungi</button>
+            <button type="reset" class="secondary">Reset</button>
+        </div>
+
+    </form>
+
+    <div class="cancel">
+        <a href="/magazzino/stoccaggio/{{nome}}/{{posizione}}">
+            <button type="button">Annulla</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

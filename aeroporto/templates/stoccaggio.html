@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Gestione Magazzini</title>
+    <title>Stoccaggio</title>
 
     <style>
         *{ margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
@@ -42,7 +42,7 @@
 
         .nav-buttons button:hover{ background:#0096c7; }
 
-        .container{ flex:1; padding:25px; overflow-x:auto; }
+        .container-wrap{ flex:1; padding:25px; overflow-x:auto; }
 
         h1{ margin-bottom:20px; }
 
@@ -53,22 +53,6 @@
             border-radius:10px;
         }
 
-        .top-actions{ margin-bottom:20px; }
-        .top-actions a{ text-decoration:none; }
-
-        .top-actions button{
-            padding:10px 14px;
-            border:none;
-            border-radius:10px;
-            background:#023e8a;
-            color:white;
-            font-weight:bold;
-            cursor:pointer;
-            transition:0.2s;
-        }
-
-        .top-actions button:hover{ background:#0353a4; transform:translateY(-2px); }
-
         table{
             width:100%;
             border-collapse:collapse;
@@ -78,8 +62,8 @@
             backdrop-filter:blur(6px);
         }
 
-        th, td{ padding:14px; text-align:center; }
-        th{ background:rgba(0,119,182,0.55); font-size:15px; }
+        th, td{ padding:12px; text-align:center; white-space:nowrap; }
+        th{ background:rgba(0,119,182,0.55); font-size:14px; }
         tr:nth-child(even){ background:rgba(255,255,255,0.10); }
 
         td a{ color:#90e0ef; text-decoration:none; font-weight:bold; margin:0 5px; }
@@ -90,16 +74,14 @@
 <body>
 
 <div class="navbar">
-    <div class="title">Gestione Magazzini · {{request.user.username}}</div>
+    <div class="title">Merci stoccate nel magazzino {{nome}} in {{posizione}}</div>
     <div class="nav-buttons">
-        <a href="/modifica_password"><button type="button">Modifica Password</button></a>
-        <a href="/logout"><button type="button">Logout</button></a>
+        <a href="/magazzino/stoccaggio/aggiungi/{{nome}}/{{posizione}}"><button type="button">Aggiungi Merce</button></a>
+        <a href="/magazzino"><button type="button">Ritorna alla Dashboard</button></a>
     </div>
 </div>
 
-<div class="container">
-
-    <h1>I miei magazzini</h1>
+<div class="container-wrap">
 
     {% if messages %}
         <div class="messages">
@@ -109,31 +91,24 @@
         </div>
     {% endif %}
 
-    <div class="top-actions">
-        <a href="/magazzino/aggiungi">
-            <button>Aggiungi Magazzino</button>
-        </a>
-    </div>
-
     <table>
         <tr>
-            <th>Nome</th>
-            <th>Posizione</th>
-            <th>Tipo</th>
-            <th>Capacità</th>
+            <th>SSCC</th>
+            <th>Peso</th>
+            <th>Paese</th>
+            <th>Categoria</th>
             <th>Azioni</th>
         </tr>
 
-        {% for m in magazzini %}
+        {% for m in merce %}
         <tr>
-            <td>{{m.nome}}</td>
-            <td>{{m.posizione}}</td>
-            <td>{{m.tipo}}</td>
-            <td>{{m.capacita}}</td>
+            <td>{{m.sscc}}</td>
+            <td>{{m.peso}}</td>
+            <td>{{m.paese}}</td>
+            <td>{{m.categoria}}</td>
             <td>
-                <a href="/magazzino/modifica/{{m.nome}}/{{m.posizione}}">Modifica</a>
-                <a href="/magazzino/elimina/{{m.nome}}/{{m.posizione}}">Elimina</a>
-                <a href="/magazzino/stoccaggio/{{m.nome}}/{{m.posizione}}">Merci Stoccate</a>
+                <a href="/magazzino/stoccaggio/modifica/{{m.sscc}}">Sposta</a>
+                <a href="/magazzino/stoccaggio/elimina/{{m.sscc}}">Rimuovi</a>
             </td>
         </tr>
         {% endfor %}
