@@ -1133,45 +1133,47 @@ def assistente_aggiungi(request):
     itinerari = UserItinerario.objects.filter(user=request.user)
     if request.method == 'POST':
         try:
-            a = AssistenteDiVolo.objects.create(
-                codice_fiscale=request.POST.get('codice_fiscale'),
-                nome=request.POST.get('nome'),
-                cognome=request.POST.get('cognome'),
-                data_nascita=request.POST.get('data_nascita'),
-                numero_licenza=int(request.POST.get('numero_licenza') or 0),
-                stipendio=float(request.POST.get('stipendio') or 0),
-                data_assunzione=request.POST.get('data_assunzione'),
-                valutazione=float(request.POST.get('valutazione') or 0),
-                id_itinerario_id=request.POST.get('id_itinerario') or None
-            )
+            with transaction.atomic():
+                a = AssistenteDiVolo.objects.create(
+                    codice_fiscale=request.POST.get('codice_fiscale'),
+                    nome=request.POST.get('nome'),
+                    cognome=request.POST.get('cognome'),
+                    data_nascita=request.POST.get('data_nascita'),
+                    numero_licenza=int(request.POST.get('numero_licenza') or 0),
+                    stipendio=float(request.POST.get('stipendio') or 0),
+                    data_assunzione=request.POST.get('data_assunzione'),
+                    valutazione=float(request.POST.get('valutazione') or 0),
+                    id_itinerario_id=request.POST.get('id_itinerario') or None
+                )
 
-            lingue_raw = request.POST.get('lingue', '')
+                lingue_raw = request.POST.get('lingue', '')
 
-            lingue_list = [
-                x.strip()
-                for x in lingue_raw.split(',')
-                if x.strip()
-            ]
+                lingue_list = [
+                    x.strip()
+                    for x in lingue_raw.split(',')
+                    if x.strip()
+                ]
 
-            with connection.cursor() as cursor:
-                for item in lingue_list:
+                with connection.cursor() as cursor:
+                    for item in lingue_list:
 
-                    if ':' not in item:
-                        continue
+                        if ':' not in item:
+                            continue
 
-                    lingua, livello = item.split(':', 1)
+                        lingua, livello = item.split(':', 1)
 
-                    cursor.execute("""
-                        INSERT INTO Lingua(Codice_fiscale, Lingua, Livello)
-                        VALUES (%s, %s, %s)
-                    """, [a.codice_fiscale, lingua.strip(), livello.strip()])
+                        cursor.execute("""
+                            INSERT INTO Lingua(Codice_fiscale, Lingua, Livello)
+                            VALUES (%s, %s, %s)
+                        """, [a.codice_fiscale, lingua.strip(), livello.strip()])
+
+                UserAssistenteDiVolo.objects.create(user=request.user, assistente=a)
         except DatabaseError as e:
             errore = estrai_errore_db(e)
             return render(request, 'assistente_aggiungi.html', {
                 'error': errore,
                 'itinerari': itinerari
             })
-        UserAssistenteDiVolo.objects.create(user=request.user, assistente=a)
         messages.success(request, 'Assistente di volo aggiunto con successo')
         return redirect('assistente')
 
