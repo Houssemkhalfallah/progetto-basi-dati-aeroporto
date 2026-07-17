@@ -1,6 +1,6 @@
 # Trigger del database `aeroporto`
 
-Totale trigger: **30**
+Totale trigger: **34**
 
 ## 1. `controllo_peso_e_capacita`
 
@@ -918,5 +918,97 @@ DELIMITER $$
 CREATE TRIGGER aggiorna_peso_container3 AFTER DELETE ON Merce
 FOR EACH ROW
 BEGIN UPDATE Container_Aereo SET Container_Aereo.Peso=Container_Aereo.Peso-OLD.Peso WHERE Container_Aereo.ID=OLD.ID_container; END $$
+DELIMITER ;
+```
+
+## 31. `controllo_codice_fiscale_passeggero`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Passeggero` |
+| Evento | `INSERT` |
+| Timing | `BEFORE` |
+| Funzione | Impedisce di inserire un passeggero con un codice fiscale già appartenente a un assistente di volo. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER controllo_codice_fiscale_passeggero BEFORE INSERT ON Passeggero
+FOR EACH ROW
+BEGIN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Assistente_di_volo) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un assistente di volo";
+END IF;
+END $$
+DELIMITER ;
+```
+
+## 32. `controllo_codice_fiscale_passeggero2`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Passeggero` |
+| Evento | `UPDATE` |
+| Timing | `BEFORE` |
+| Funzione | Impedisce di modificare il codice fiscale di un passeggero usando quello già appartenente a un assistente di volo. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER controllo_codice_fiscale_passeggero2 BEFORE UPDATE ON Passeggero
+FOR EACH ROW
+BEGIN
+IF NEW.Codice_fiscale <> OLD.Codice_fiscale THEN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Assistente_di_volo) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un assistente di volo";
+END IF;
+END IF;
+END $$
+DELIMITER ;
+```
+
+## 33. `controllo_codice_fiscale_assistente`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Assistente_di_volo` |
+| Evento | `INSERT` |
+| Timing | `BEFORE` |
+| Funzione | Impedisce di inserire un assistente di volo con un codice fiscale già appartenente a un passeggero. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER controllo_codice_fiscale_assistente BEFORE INSERT ON Assistente_di_volo
+FOR EACH ROW
+BEGIN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Passeggero) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un passeggero";
+END IF;
+END $$
+DELIMITER ;
+```
+
+## 34. `controllo_codice_fiscale_assistente2`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Assistente_di_volo` |
+| Evento | `UPDATE` |
+| Timing | `BEFORE` |
+| Funzione | Impedisce di modificare il codice fiscale di un assistente di volo usando quello già appartenente a un passeggero. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER controllo_codice_fiscale_assistente2 BEFORE UPDATE ON Assistente_di_volo
+FOR EACH ROW
+BEGIN
+IF NEW.Codice_fiscale <> OLD.Codice_fiscale THEN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Passeggero) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un passeggero";
+END IF;
+END IF;
+END $$
 DELIMITER ;
 ```

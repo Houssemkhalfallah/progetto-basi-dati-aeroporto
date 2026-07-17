@@ -459,6 +459,26 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`django`@`localhost`*/ /*!50003 TRIGGER `controllo_codice_fiscale_assistente` BEFORE INSERT ON `assistente_di_volo` FOR EACH ROW BEGIN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Passeggero) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un passeggero";
+END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = cp850 */ ;
+/*!50003 SET character_set_results = cp850 */ ;
+/*!50003 SET collation_connection  = cp850_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`django`@`localhost`*/ /*!50003 TRIGGER `controllo_itinerario_assistente2` BEFORE UPDATE ON `assistente_di_volo` FOR EACH ROW BEGIN
 DECLARE numero_assistenti INT;
 IF NOT(OLD.ID_itinerario <=> NEW.ID_itinerario) AND NEW.ID_itinerario IS NOT NULL THEN
@@ -469,6 +489,28 @@ WHERE ID_itinerario=NEW.ID_itinerario;
 IF numero_assistenti>=6 THEN
 SIGNAL SQLSTATE '45000'
 SET MESSAGE_TEXT='Non si possono inserire piu di 6 assistenti di volo per itinerario';
+END IF;
+END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = cp850 */ ;
+/*!50003 SET character_set_results = cp850 */ ;
+/*!50003 SET collation_connection  = cp850_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`django`@`localhost`*/ /*!50003 TRIGGER `controllo_codice_fiscale_assistente2` BEFORE UPDATE ON `assistente_di_volo` FOR EACH ROW BEGIN
+IF NEW.Codice_fiscale <> OLD.Codice_fiscale THEN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Passeggero) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un passeggero";
 END IF;
 END IF;
 END */;;
@@ -1237,6 +1279,48 @@ LOCK TABLES `passeggero` WRITE;
 INSERT INTO `passeggero` VALUES ('khlhsm01r07f923e','angelica','bianco','2001-10-06','3894420398');
 /*!40000 ALTER TABLE `passeggero` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = cp850 */ ;
+/*!50003 SET character_set_results = cp850 */ ;
+/*!50003 SET collation_connection  = cp850_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`django`@`localhost`*/ /*!50003 TRIGGER `controllo_codice_fiscale_passeggero` BEFORE INSERT ON `passeggero` FOR EACH ROW BEGIN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Assistente_di_volo) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un assistente di volo";
+END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = cp850 */ ;
+/*!50003 SET character_set_results = cp850 */ ;
+/*!50003 SET collation_connection  = cp850_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`django`@`localhost`*/ /*!50003 TRIGGER `controllo_codice_fiscale_passeggero2` BEFORE UPDATE ON `passeggero` FOR EACH ROW BEGIN
+IF NEW.Codice_fiscale <> OLD.Codice_fiscale THEN
+IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Assistente_di_volo) THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un assistente di volo";
+END IF;
+END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `posto`
@@ -1730,4 +1814,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-17  8:49:31
+-- Dump completed on 2026-07-17  9:01:06
