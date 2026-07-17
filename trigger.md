@@ -1,6 +1,6 @@
 # Trigger del database `aeroporto`
 
-Totale trigger: **34**
+Totale trigger: **40**
 
 ## 1. `controllo_peso_e_capacita`
 
@@ -1008,6 +1008,146 @@ IF NEW.Codice_fiscale IN (SELECT Codice_fiscale FROM Passeggero) THEN
 SIGNAL SQLSTATE '45000'
 SET MESSAGE_TEXT="Questo codice fiscale appartiene ad un passeggero";
 END IF;
+END IF;
+END $$
+DELIMITER ;
+```
+
+## 35. `elimina_merce_non_stoccata`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Container_Aereo` |
+| Evento | `DELETE` |
+| Timing | `AFTER` |
+| Funzione | Elimina le merci collegate al container cancellato se non risultano stoccate in un magazzino. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER elimina_merce_non_stoccata AFTER DELETE ON Container_Aereo
+FOR EACH ROW
+BEGIN
+    DELETE Merce
+    FROM Merce
+    LEFT JOIN Stoccaggio ON Merce.SSCC = Stoccaggio.SSCC
+    WHERE Merce.ID_container = OLD.ID
+      AND Stoccaggio.Nome_magazzino IS NULL;
+END $$
+DELIMITER ;
+```
+
+## 36. `aggiorna_prenotazioni`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Itinerario` |
+| Evento | `UPDATE` |
+| Timing | `AFTER` |
+| Funzione | Aggiorna le date delle prenotazioni collegate agli aerei dell'itinerario modificato. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER aggiorna_prenotazioni AFTER UPDATE ON Itinerario
+FOR EACH ROW
+BEGIN
+IF NEW.Data_inizio <> OLD.Data_inizio OR NEW.Data_fine <> OLD.Data_fine THEN
+UPDATE Prenotazione
+SET Data_inizio = NEW.Data_inizio, Scadenza = NEW.Data_fine
+WHERE Codice_ICAO IN (SELECT Codice_ICAO FROM Aereo WHERE ID_itinerario = NEW.ID);
+END IF;
+END $$
+DELIMITER ;
+```
+
+## 37. `cancella_prenotazione`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Itinerario` |
+| Evento | `DELETE` |
+| Timing | `BEFORE` |
+| Funzione | Cancella le prenotazioni collegate agli aerei appartenenti all'itinerario eliminato. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER cancella_prenotazione BEFORE DELETE ON Itinerario
+FOR EACH ROW
+BEGIN
+DELETE Prenotazione
+FROM Aereo JOIN Prenotazione ON Prenotazione.Codice_ICAO = Aereo.Codice_ICAO
+WHERE Aereo.ID_itinerario = OLD.ID;
+END $$
+DELIMITER ;
+```
+
+## 38. `controlla_aggiornamento_tipo_magazzino`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Magazzino_aeroportuale` |
+| Evento | `UPDATE` |
+| Timing | `BEFORE` |
+| Funzione | Impedisce di modificare il tipo di un magazzino se contiene già merci stoccate. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER controlla_aggiornamento_tipo_magazzino BEFORE UPDATE ON Magazzino_aeroportuale
+FOR EACH ROW
+BEGIN
+DECLARE numero_riferimenti INT;
+IF UPPER(NEW.Tipo) <> UPPER(OLD.Tipo) THEN
+SELECT COUNT(Stoccaggio.SSCC)
+INTO numero_riferimenti
+FROM Stoccaggio
+WHERE Stoccaggio.Nome_magazzino = OLD.Nome AND Stoccaggio.Posizione_magazzino = OLD.Posizione;
+IF numero_riferimenti > 0 THEN
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT='Non risulta consentito modificare il tipo di un magazzino contenente delle merci';
+END IF;
+END IF;
+END $$
+DELIMITER ;
+```
+
+## 39. `inizializzazione_contatori_aereo`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Aereo` |
+| Evento | `INSERT` |
+| Timing | `BEFORE` |
+| Funzione | Inizializza peso e volume occupati a 0 per gli aerei di tipo Trasporto merci. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER inizializzazione_contatori_aereo BEFORE INSERT ON Aereo
+FOR EACH ROW
+BEGIN
+IF NEW.Tipo='Trasporto merci' THEN
+SET NEW.Peso_occupato=0, NEW.Volume_occupato=0;
+END IF;
+END $$
+DELIMITER ;
+```
+
+## 40. `rimuovi_prenotazioni`
+
+| Campo | Valore |
+|---|---|
+| Tabella | `Aereo` |
+| Evento | `UPDATE` |
+| Timing | `AFTER` |
+| Funzione | Rimuove le prenotazioni quando viene cambiato o rimosso l'itinerario associato all'aereo. |
+
+```sql
+DELIMITER $$
+CREATE TRIGGER rimuovi_prenotazioni AFTER UPDATE ON Aereo
+FOR EACH ROW
+BEGIN
+IF NOT(OLD.ID_itinerario <=> NEW.ID_itinerario) AND OLD.ID_itinerario IS NOT NULL THEN
+DELETE
+FROM Prenotazione
+WHERE Codice_ICAO = NEW.Codice_ICAO;
 END IF;
 END $$
 DELIMITER ;
